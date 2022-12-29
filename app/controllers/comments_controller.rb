@@ -1,12 +1,22 @@
+require File.join(Rails.root, "config", "global_variables.rb")
+
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[ show update destroy ]
   before_action :authorized
 
-  # GET /comments
+  # GET /comments?post_id={post_id}&page={page_number}
   def index
-    @comments = Comment.all
-
-    render json: @comments
+    if params[:post_id]
+      @comments = Comment.where(post_id: params[:post_id]).paginate(page: params[:page], per_page: $per_page)
+    else
+      @comments = Comment.all.paginate(page: params[:page], per_page: $per_page)
+    end
+  
+    if @comments.total_pages < params[:page].to_i
+      render json: []
+    else
+      render json: @comments
+    end
   end
 
   # GET /comments/1
@@ -14,12 +24,12 @@ class CommentsController < ApplicationController
     render json: @comment
   end
 
-  # GET /posts/:post_id/comments
-  def show_comments_for_post
-    @post = Post.find(params[:post_id])
-    @comments = @post.comments
-    render json: @comments
-  end
+  # # GET /posts/:post_id/comments
+  # def show_comments_for_post
+  #   @post = Post.find(params[:post_id])
+  #   @comments = @post.comments
+  #   render json: @comments
+  # end
 
   # POST /comments
   def create
