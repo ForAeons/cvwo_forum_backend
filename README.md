@@ -1,24 +1,130 @@
-# README
+# Ruby On Rails
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+---
 
-Things you may want to cover:
+USER
+Description
+Action / URL
+Body (if applicable)
 
-* Ruby version
+Creating user
+POST
+/users
 
-* System dependencies
+```
+{
+    “username” string
+    “Password” string
+}
+```
 
-* Configuration
+Login
+POST
+/login
 
-* Database creation
+```
+{
+    “username” string
+    “Password” string
+}
+```
 
-* Database initialization
+---
 
-* How to run the test suite
+POST
+Description
+Action / URL
+Body (if applicable)
 
-* Services (job queues, cache servers, search engines, etc.)
+Creating post
+POST
+/posts
 
-* Deployment instructions
+```
+{
+	“title” string
+	“body” string
+	“category” string
+}
+```
 
-* ...
+Getting all posts
+GET
+/posts
+
+-
+
+Get specific post
+GET
+/posts/:post_id
+
+-
+
+Updating specific post
+PATCH
+/posts/:post_id
+
+```
+{
+	“title” string
+	“body” string
+	“category” string
+}
+```
+
+Deleting specific post
+DELETE
+/posts/:post_id
+
+---
+
+COMMENT
+Description
+Action / URL
+Body (if applicable)
+
+Creating comment
+POST
+/comments
+
+```
+{
+	“body” string
+	“post_id” int
+}
+```
+
+Getting all posts
+GET
+/comments
+
+-
+
+Get specific post
+GET
+/comments/:comment_id
+
+-
+
+Getting all comments regarding specific post
+GET
+/posts/:post_id/comments
+
+-
+
+Updating specific comment
+PATCH
+/comments/:comment_id
+
+```
+{
+	“body” string
+	“post_id” int
+}
+```
+
+Deleting specific comment
+DELETE
+/comments/:comment_id
+
+-
