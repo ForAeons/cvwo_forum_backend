@@ -7,7 +7,6 @@ class PostsController < ApplicationController
   # GET /posts
   # def index
   #   @posts = Post.all
-  catergory
   #   render json: @posts
   # end
   # GET /posts?q={query}&cat={category}&page={page_number}
