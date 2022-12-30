@@ -15,7 +15,7 @@ class PostsController < ApplicationController
     if params[:q]
       @posts = Post.where("title LIKE ?", "%#{params[:q]}%").paginate(page: params[:page], per_page: $per_page)
     elsif params[:cat]
-      @posts = Post.where(catergory: params[:cat]).paginate(page: params[:page], per_page: $per_page)
+      @posts = Post.where(category: params[:cat]).paginate(page: params[:page], per_page: $per_page)
     else
       @posts = Post.paginate(page: params[:page], per_page: $per_page)
     end
@@ -33,7 +33,7 @@ class PostsController < ApplicationController
   end
 
   # GET /posts/latest/:page
-  def lastest
+  def latest
     @posts = Post.order(created_at: :desc).paginate(page: params[:page], per_page: $per_page)
 
     if @posts.total_pages < params[:page].to_i
