@@ -2,7 +2,7 @@ require File.join(Rails.root, "config", "global_variables.rb")
 
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[ show update destroy ]
-  before_action :authorized
+  skip_before_action :authorized, only: %i[ index show]
 
   # GET /comments?post_id={post_id}&page={page_number}
   def index
@@ -13,7 +13,7 @@ class CommentsController < ApplicationController
     end
   
     if @comments.total_pages < params[:page].to_i
-      render json: []
+      render json: {error: "No more comments can be found."}
     else
       render json: @comments
     end
@@ -35,6 +35,7 @@ class CommentsController < ApplicationController
   def create
     @comment = Comment.new(comment_params)
     @comment.user = @user
+    @comment.author = @user.username
     @comment.post = Post.find(params[:post_id])
 
     if @comment.save
@@ -46,7 +47,10 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1
   def update
-    if @comment.update(comment_params)
+    # checks for the identity of the user
+    if @comment.user_id != @user.id
+      render json: { error: 'Unauthorized' }, status: :unauthorized
+    elsif @comment.update(comment_params)
       render json: @comment
     else
       render json: @comment.errors, status: :unprocessable_entity
@@ -55,7 +59,12 @@ class CommentsController < ApplicationController
 
   # DELETE /comments/1
   def destroy
-    @comment.destroy
+    # checks for the identity of the user
+    if @comment.user_id == @user.id
+      @comment.destroy
+    else
+      render json: { error: 'Unauthorized. You are not the creator of this comment' }, status: :unauthorized
+    end
   end
 
   private
@@ -66,6 +75,6 @@ class CommentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def comment_params
-      params.require(:comment).permit(:body, :User_id, :post_id)
+      params.require(:comment).permit(:content, :User_id, :post_id)
     end
 end

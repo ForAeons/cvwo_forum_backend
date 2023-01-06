@@ -2,7 +2,7 @@ require File.join(Rails.root, "config", "global_variables.rb")
 
 class PostsController < ApplicationController
   before_action :set_post, only: %i[ show update destroy ]
-  before_action :authorized
+  skip_before_action :authorized, only: %i[ index show]
 
   # GET /posts
   # def index
@@ -20,7 +20,7 @@ class PostsController < ApplicationController
     end
   
     if @posts.total_pages < params[:page].to_i
-      render json: []
+      render json: {error: "No more post can be found"}
     else
       render json: @posts
     end
@@ -33,10 +33,10 @@ class PostsController < ApplicationController
 
   # GET /posts/latest/:page
   def latest
-    @posts = Post.order(created_at: :desc).paginate(page: params[:page], per_page: $per_page)
+    @posts = Post.recent.paginate(page: params[:page], per_page: $per_page)
 
     if @posts.total_pages < params[:page].to_i
-      render json: []
+      render json: {error: "No more post can be found"}
     else
       render json: @posts
     end
@@ -46,6 +46,7 @@ class PostsController < ApplicationController
   def create
     @post = Post.new(post_params)
     @post.user = @user
+    @post.author = @user.username
 
     if @post.save
       render json: @post, status: :created, location: @post
@@ -56,7 +57,10 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1
   def update
-    if @post.update(post_params)
+    # checks for the identity of the user
+    if @post.user_id != @user.id
+      render json: { error: 'Unauthorized. You are not the creator of this post' }, status: :unauthorized
+    elsif @post.update(post_params)
       render json: @post
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -65,7 +69,12 @@ class PostsController < ApplicationController
 
   # DELETE /posts/1
   def destroy
-    @post.destroy
+    # checks for the identity of the user
+    if @comment.user_id != @user.id
+      render json: { error: 'Unauthorized. You are not the creator of this post' }, status: :unauthorized
+    else
+      @post.destroy
+    end
   end
 
   private
@@ -76,6 +85,6 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title, :body, :category, :User_id)
+      params.require(:post).permit(:title, :content, :category, :user_id)
     end
 end
