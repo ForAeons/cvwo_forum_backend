@@ -62,6 +62,7 @@ class CommentsController < ApplicationController
     # checks for the identity of the user
     if @comment.user_id == @user.id
       @comment.destroy
+      render json: {} status: :ok
     else
       render json: { error: 'Unauthorized. You are not the creator of this comment' }, status: :unauthorized
     end

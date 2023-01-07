@@ -74,6 +74,7 @@ class PostsController < ApplicationController
       render json: { error: 'Unauthorized. You are not the creator of this post' }, status: :unauthorized
     else
       @post.destroy
+      render json: {} status: :ok
     end
   end
 
