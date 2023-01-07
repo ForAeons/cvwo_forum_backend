@@ -36,7 +36,7 @@ class PostsController < ApplicationController
     @posts = Post.recent.paginate(page: params[:page], per_page: $per_page)
 
     if @posts.total_pages < params[:page].to_i
-      render json: {error: "No more post can be found"}
+      render json: {error: "No more post can be found"}, status: :range_not_satisfiable
     else
       render json: @posts
     end
