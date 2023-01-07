@@ -70,7 +70,7 @@ class PostsController < ApplicationController
   # DELETE /posts/1
   def destroy
     # checks for the identity of the user
-    if @comment.user_id != @user.id
+    if @post.user_id != @user.id
       render json: { error: 'Unauthorized. You are not the creator of this post' }, status: :unauthorized
     else
       @post.destroy
