@@ -6,5 +6,5 @@ class Post < ApplicationRecord
   validates :content, presence: true, length: { maximum: 5000 }
   validates :author, presence: true, length: { in: 6..30 }
 
-  scope :recent, -> { order(created_at: :desc) }
+  scope :recent, -> { order(updated_at: :desc) }
 end

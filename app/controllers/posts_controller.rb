@@ -12,15 +12,15 @@ class PostsController < ApplicationController
   # GET /posts?q={query}&cat={category}&page={page_number}
   def index
     if params[:q]
-      @posts = Post.where("title LIKE ?", "%#{params[:q]}%").paginate(page: params[:page], per_page: $per_page)
+      @posts = Post.recent.where("title LIKE ?", "%#{params[:q]}%").paginate(page: params[:page], per_page: $per_page)
     elsif params[:cat]
-      @posts = Post.where(category: params[:cat]).paginate(page: params[:page], per_page: $per_page)
+      @posts = Post.recent.where(category: params[:cat]).paginate(page: params[:page], per_page: $per_page)
     else
-      @posts = Post.paginate(page: params[:page], per_page: $per_page)
+      @posts = Post.recent.paginate(page: params[:page], per_page: $per_page)
     end
   
     if @posts.total_pages < params[:page].to_i
-      render json: {error: "No more post can be found"}
+      render json: {error: "No more post can be found"}, status: :range_not_satisfiable
     else
       render json: @posts
     end

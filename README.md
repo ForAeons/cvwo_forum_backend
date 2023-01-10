@@ -155,13 +155,3 @@ DELETE
 /comments/:comment_id
 
 `-`
-
----
-
-# Credits:
-
-- Guides by [RubyGuides](https://guides.rubyonrails.org/getting_started.html)
-
-- Implementation of JWT Token Authentication by Alex Merced's [tutorial](https://www.youtube.com/playlist?list=PLY6oTPmKnKbYNIC0Yq3Cc6mgHZrWiZcJU)
-
-- QnA assistance from [ChatGPT](https://chat.openai.com/chat)
