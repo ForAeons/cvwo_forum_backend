@@ -20,7 +20,7 @@ class PostsController < ApplicationController
     end
   
     if @posts.total_pages < params[:page].to_i
-      render json: {error: "No more post can be found"}, status: :range_not_satisfiable
+      render error: {error: "No more post can be found"}, status: :range_not_satisfiable
     else
       render json: @posts
     end
@@ -31,16 +31,16 @@ class PostsController < ApplicationController
     render json: @post
   end
 
-  # GET /posts/latest/:page
-  def latest
-    @posts = Post.recent.paginate(page: params[:page], per_page: $per_page)
+  # # GET /posts/latest/:page
+  # def latest
+  #   @posts = Post.recent.paginate(page: params[:page], per_page: $per_page)
 
-    if @posts.total_pages < params[:page].to_i
-      render json: {error: "No more post can be found"}, status: :range_not_satisfiable
-    else
-      render json: @posts
-    end
-  end
+  #   if @posts.total_pages < params[:page].to_i
+  #     render error: {error: "No more post can be found"}, status: :range_not_satisfiable
+  #   else
+  #     render json: @posts
+  #   end
+  # end
 
   # POST /posts
   def create
@@ -51,7 +51,7 @@ class PostsController < ApplicationController
     if @post.save
       render json: @post, status: :created, location: @post
     else
-      render json: @post.errors, status: :unprocessable_entity
+      render error: @post.errors, status: :unprocessable_entity
     end
   end
 
@@ -63,7 +63,7 @@ class PostsController < ApplicationController
     elsif @post.update(post_params)
       render json: @post
     else
-      render json: @post.errors, status: :unprocessable_entity
+      render error: @post.errors, status: :unprocessable_entity
     end
   end
 
@@ -71,7 +71,7 @@ class PostsController < ApplicationController
   def destroy
     # checks for the identity of the user
     if @post.user_id != @user.id
-      render json: { error: 'Unauthorized. You are not the creator of this post' }, status: :unauthorized
+      render error: { error: 'Unauthorized. You are not the creator of this post' }, status: :unauthorized
     else
       @post.destroy
       render json: {}, status: :ok

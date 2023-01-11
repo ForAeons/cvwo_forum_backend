@@ -13,7 +13,7 @@ class CommentsController < ApplicationController
     end
   
     if @comments.total_pages < params[:page].to_i
-      render json: {error: "No more comments can be found."}, status: :range_not_satisfiable
+      render error: {error: "No more comments can be found."}, status: :range_not_satisfiable
     else
       render json: @comments
     end
@@ -41,7 +41,7 @@ class CommentsController < ApplicationController
     if @comment.save
       render json: @comment, status: :created, location: @comment
     else
-      render json: @comment.errors, status: :unprocessable_entity
+      render error: @comment.errors, status: :unprocessable_entity
     end
   end
 
@@ -49,11 +49,11 @@ class CommentsController < ApplicationController
   def update
     # checks for the identity of the user
     if @comment.user_id != @user.id
-      render json: { error: 'Unauthorized' }, status: :unauthorized
+      render error: { error: 'Unauthorized' }, status: :unauthorized
     elsif @comment.update(comment_params)
       render json: @comment
     else
-      render json: @comment.errors, status: :unprocessable_entity
+      render error: @comment.errors, status: :unprocessable_entity
     end
   end
 
@@ -64,7 +64,7 @@ class CommentsController < ApplicationController
       @comment.destroy
       render json: {}, status: :ok
     else
-      render json: { error: 'Unauthorized. You are not the creator of this comment' }, status: :unauthorized
+      render error: { error: 'Unauthorized. You are not the creator of this comment' }, status: :unauthorized
     end
   end
 
