@@ -15,6 +15,7 @@ class UsersController < ApplicationController
           render json: @user
         else
           render error: @user.errors, status: :unprocessable_entity
+        end
       else
         render error: {error: "Invalid credentials"}, status: :unauthorized
       end
