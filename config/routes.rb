@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :comments
   post "/signup", to: "users#create"
   post "/login", to: "users#login"
-  get "/user/:username", to: "users#show"
+  patch "/users/:id", to: "user#update"
+  get "/users/:username", to: "users#show"
   get "/auto_login", to: "users#auto_login"
 end
