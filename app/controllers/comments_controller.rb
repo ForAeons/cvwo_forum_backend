@@ -12,11 +12,7 @@ class CommentsController < ApplicationController
       @comments = Comment.all
     end
   
-    if @comments.total_pages < params[:page].to_i
-      render error: {error: "No more comments can be found."}, status: :range_not_satisfiable
-    else
-      render json: @comments
-    end
+    render json: @comments
   end
 
   # GET /comments/1

@@ -19,11 +19,7 @@ class PostsController < ApplicationController
       @posts = Post.recent
     end
   
-    if @posts.total_pages < params[:page].to_i
-      render error: {error: "No more post can be found"}, status: :range_not_satisfiable
-    else
-      render json: @posts
-    end
+    render json: @posts
   end
 
   # GET /posts/1
