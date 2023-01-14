@@ -12,11 +12,11 @@ class PostsController < ApplicationController
   # GET /posts?q={query}&cat={category}&page={page_number}&size={page_size}
   def index
     if params[:q]
-      @posts = Post.recent.where("title LIKE ?", "%#{params[:q]}%").paginate(page: params[:page], per_page: params[:size])
+      @posts = Post.recent.where("title LIKE ?", "%#{params[:q]}%")
     elsif params[:cat]
-      @posts = Post.recent.where(category: params[:cat]).paginate(page: params[:page], per_page: params[:size])
+      @posts = Post.recent.where(category: params[:cat])
     else
-      @posts = Post.recent.paginate(page: params[:page], per_page: params[:size])
+      @posts = Post.recent
     end
   
     if @posts.total_pages < params[:page].to_i
