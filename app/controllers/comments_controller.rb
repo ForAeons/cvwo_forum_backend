@@ -7,9 +7,9 @@ class CommentsController < ApplicationController
   # GET /comments?post_id={post_id}&page={page_number}&size={page_size}
   def index
     if params[:post_id]
-      @comments = Comment.where(post_id: params[:post_id])
+      @comments = Comment.in_order.where(post_id: params[:post_id])
     else
-      @comments = Comment.all
+      @comments = Comment.in_order.all
     end
   
     render json: @comments
