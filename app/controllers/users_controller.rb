@@ -63,7 +63,7 @@ class UsersController < ApplicationController
     end
 
     def record_not_found
-
+      render error: {error: "User not found"}, status: :unprocessable_entity
     end
   
     private
