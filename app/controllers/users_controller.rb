@@ -3,9 +3,7 @@ class UsersController < ApplicationController
 
     def show
       @user = User.find_by(username: params[:username])
-      if @user.nil?
-        render error: {error: "User not found"}, status: :unprocessable_entity
-      end
+      raise ActionController::BadRequest, "User not found" if @user.nil?
       render json: @user
     end
 
