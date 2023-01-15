@@ -1,8 +1,9 @@
 class UsersController < ApplicationController  
     before_action :authorized, only: [:auto_login, :update]
+    rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
     def show
-      @user = User.find_by(username: params[:username])
+      @user = User.find_by!(username: params[:username])
       render json: @user
     end
 
@@ -56,6 +57,10 @@ class UsersController < ApplicationController
   
     def auto_login
       render json: @user
+    end
+
+    def record_not_found
+      render error: {error: "User not found"}
     end
   
     private
