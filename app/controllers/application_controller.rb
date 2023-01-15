@@ -1,7 +1,12 @@
 require File.join(Rails.root, "config", "global_variables.rb")
 
 class ApplicationController < ActionController::API
-    before_action :authorized
+  before_action :authorized
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
+  def record_not_found
+    render error: {error: "Data not found"}, status: :bad_request
+  end
 
   def encode_token(payload)
     JWT.encode(payload, $JWT_Secret_Key)

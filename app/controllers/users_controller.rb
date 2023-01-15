@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
     def show
       @user = User.find_by(username: params[:username])
-      raise ActionController::BadRequest, "User not found" if @user.nil?
+      raise ActionController::RecordNotFound, "User not found" if @user.nil?
       render json: @user
     end
 
