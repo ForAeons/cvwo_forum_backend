@@ -6,6 +6,6 @@ Rails.application.routes.draw do
   post "/signup", to: "users#create"
   post "/login", to: "users#login"
   patch "/users/:id", to: "users#update"
-  get "/users/:username", to: "users#show"
+  get "/users/:id", to: "users#show"
   get "/auto_login", to: "users#auto_login"
 end

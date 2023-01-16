@@ -2,7 +2,7 @@ class UsersController < ApplicationController
     before_action :authorized, only: [:auto_login, :update]
 
     def show
-      @user = User.find_by(username: params[:username])
+      @user = User.find_by(params[:id])
       if @user.nil?
         render error: {error: "User not found"}, status: :bad_request
       else
