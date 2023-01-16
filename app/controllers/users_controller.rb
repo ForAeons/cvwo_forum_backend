@@ -17,7 +17,7 @@ class UsersController < ApplicationController
       if @user && @user.authenticate(params[:password])
         if @user.update(user_params)
           if params[:new_password].present?
-            @user.password = params[:new_password]
+            @user.password = password: params[:new_password]
             @user.save
           end
           render json: @user
