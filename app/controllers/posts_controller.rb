@@ -12,7 +12,7 @@ class PostsController < ApplicationController
   # GET /posts?q={query}&cat={category}&page={page_number}&size={page_size}
   def index
     if params[:q]
-      @posts = Post.recent.where("title LIKE ?", "%#{params[:q]}%")
+      @posts = Post.recent.where("title LIKE ? OR author LIKE ?", "%#{params[:q]}%", "%#{params[:q]}%")
     elsif params[:cat]
       @posts = Post.recent.where(category: params[:cat])
     else

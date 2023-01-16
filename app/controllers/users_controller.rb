@@ -16,6 +16,9 @@ class UsersController < ApplicationController
       # checks for the existence of the username and validity of password
       if @user && @user.authenticate(params[:password])
         if @user.update(user_params)
+          if params[:new_password].present?
+            @user.password = params[:new_password]
+          end
           render json: @user
         else
           render error: @user.errors, status: :unprocessable_entity
@@ -65,7 +68,7 @@ class UsersController < ApplicationController
     private
   
     def user_params
-      params.permit(:username, :password, :bio)
+      params.permit(:username, :password, :bio, :new_password)
     end
   
 end
