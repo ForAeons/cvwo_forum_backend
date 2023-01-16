@@ -15,6 +15,8 @@ class PostsController < ApplicationController
       @posts = Post.recent.where("title LIKE ? OR author LIKE ?", "%#{params[:q]}%", "%#{params[:q]}%")
     elsif params[:cat]
       @posts = Post.recent.where(category: params[:cat])
+    elsif params[:user_id]
+      @posts = Post.recent.where(user_id: params[:user_id])
     else
       @posts = Post.recent
     end
